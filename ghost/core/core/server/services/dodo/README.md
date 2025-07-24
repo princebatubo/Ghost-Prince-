@@ -22,7 +22,7 @@ The DodoAPI enables:
 - Validating webhook signatures securely
 
 > **Documentation:**  
-> Visit the official Dodo Payments Docs: [https://dodopayments.com/docs](https://dodopayments.com/docs)
+> Visit the official Dodo Payments Docs: [https://docs.dodopayments.com/welcome](https://docs.dodopayments.com/welcome)
 
 ---
 
