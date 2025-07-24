@@ -1,49 +1,56 @@
-# Dodo Service
+# Dodo Payments Service
 
 This package contains code for Ghost's **Dodo Payments** integration.  
-It interacts with **Dodo's API** and handles webhooks.
+It interacts with the **Dodo Payments API** and handles webhooks.
 
-The main export of this package is the `DodoService` class.  
-It includes a wrapper around the **Dodo Payments API** and webhook handling logic.  
+The main export of this package is the **DodoService** class.  
+It includes a wrapper around the Dodo Payments API and webhook handling logic.  
 It is instantiated in Ghost's `core/server/services/dodo` service.
 
 ---
 
 ## Dodo API
 
-The `DodoAPI` class is a wrapper around the **Dodo Payments API**.  
-It is used by the `DodoService` class to interact with Dodo's API.
+The **DodoAPI** class is a wrapper around the **Dodo Payments API**.  
+It is used by the **DodoService** class to interact with Dodo's API.
+
+The DodoAPI enables:
+
+- Creating checkout sessions for new subscriptions
+- Managing existing subscriptions (create, update, cancel)
+- Retrieving invoices and processing payments
+- Validating webhook signatures securely
+
+> **Documentation:**  
+> Visit the official Dodo Payments Docs: [https://dodopayments.com/docs](https://dodopayments.com/docs)
 
 ---
 
 ## Dodo Webhooks
 
-Ghost listens for **Dodo webhooks** to know when:  
-- A customer has subscribed to a plan  
-- A subscription has been cancelled or updated  
-- A payment has succeeded or failed  
-- A checkout session has been completed  
+Ghost listens for **Dodo Payments webhooks** to know when:
 
-This integration is especially useful for **countries and regions where Stripe is not supported**.
-
----
+- A customer has subscribed to a plan
+- A subscription has been cancelled
+- A subscription has been updated
+- A payment has succeeded
+- A checkout session has completed
 
 ### Things to keep in mind when working with Dodo webhooks:
 
-- **Webhooks can arrive out of order.**  
-  For example, `checkout.session.completed` may arrive before or after `customer.subscription.created`.
+- Webhooks can arrive **out of order**  
+  (e.g., `checkout.session.completed` webhooks may arrive before or after `customer.subscription.created` webhooks).
+- Webhooks can be received and processed **in parallel**, so you should **not rely on the order of events**.
+- Each operation may produce **multiple events**, increasing the likelihood of race conditions.
 
-- **Webhooks can be received and processed in parallel**, so you should not rely on the order of the webhooks to determine the order of operations.
-
-- **Operations often produce multiple events**, increasing the likelihood of race conditions.
-
-See [Dodo’s Webhooks Guide](https://docs.dodo-payments.com/webhooks) for more information.
+> **Tip:** Always implement **idempotent webhook handling** to avoid double processing.
 
 ---
 
 ## Webhook Manager
 
-This class is responsible for registering the webhook endpoints with **Dodo**, so Dodo knows where to send the webhooks.
+This class is responsible for registering webhook endpoints with **Dodo Payments**,  
+so Dodo knows where to send the events.
 
 ---
 
@@ -54,7 +61,7 @@ It accepts the webhook event payload and delegates it to the appropriate handler
 
 ---
 
-## Events
+### Events
 
 The Webhook Controller listens for the following events:
 
@@ -83,16 +90,16 @@ sequenceDiagram
     Dodo-->>Ghost: Return session ID
     Ghost-->>Portal: Return session ID
     Portal->>Dodo: Redirect to checkout page
-    Note over Portal: Member enters payment details in Dodo's secure portal
+    Note over Portal: Member enters payment details in Dodo's secure checkout
     Dodo-->>Portal: Redirect to success URL
     
     par Webhook Events
         Dodo->>Ghost: customer.subscription.created
         Ghost->>Ghost: Upsert member and subscription
         Dodo->>Ghost: checkout.session.completed
-        Ghost->>Ghost: Upsert member and subscription
+        Ghost->>Ghost: Confirm checkout success
         Dodo->>Ghost: customer.subscription.updated
-        Ghost->>Ghost: Upsert member and subscription
+        Ghost->>Ghost: Update subscription record
         Dodo->>Ghost: invoice.payment_succeeded
-        Ghost->>Ghost: Record payment
+        Ghost->>Ghost: Record payment success
     end
