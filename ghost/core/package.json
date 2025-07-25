@@ -20,6 +20,7 @@
   "contributors": "https://github.com/TryGhost/Ghost/graphs/contributors",
   "license": "MIT",
   "scripts": {
+    "build": "yarn build:assets && yarn build:tsc",
     "archive": "npm pack",
     "dev": "node --watch --import=tsx index.js",
     "build:assets": "yarn build:assets:css && yarn build:assets:js",
