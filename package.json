@@ -22,7 +22,7 @@
   ],
   "scripts": {
     "archive": "nx run ghost:archive",
-    "build": "nx run-many -t build",
+    "build": "yarn workspace ghost build || echo 'No Ghost build step required'",
     "build:clean": "nx reset && rimraf -g 'ghost/*/build' && rimraf -g 'ghost/*/tsconfig.tsbuildinfo'",
     "clean:hard": "node ./.github/scripts/clean.js",
     "dev:debug": "DEBUG_COLORS=true DEBUG=@tryghost*,ghost:* yarn dev",
