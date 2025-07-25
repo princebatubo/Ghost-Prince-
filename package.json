@@ -1,28 +1,6 @@
-{
-  "name": "ghost-monorepo",
-  "version": "0.0.0-private",
-  "description": "The professional publishing platform",
-  "private": true,
-  "repository": "https://github.com/TryGhost/Ghost",
-  "author": "Ghost Foundation",
-  "license": "MIT",
-  "workspaces": [
-    "ghost/*",
-    "e2e",
-    "apps/*"
-  ],
-  "monorepo": {
-    "public": false,
-    "internalPackages": true,
-    "repo": "https://github.com/TryGhost/Ghost",
-    "scope": "@tryghost"
-  },
-  "eslintIgnore": [
-    "**/node_modules/**"
-  ],
-  "scripts": {
+"scripts": {
     "archive": "nx run ghost:archive",
-    "build": "yarn workspace ghost build || echo 'No Ghost build step required'",
+    "build": "yarn workspace ghost run build || echo 'No Ghost build step required'",
     "build:clean": "nx reset && rimraf -g 'ghost/*/build' && rimraf -g 'ghost/*/tsconfig.tsbuildinfo'",
     "clean:hard": "node ./.github/scripts/clean.js",
     "dev:debug": "DEBUG_COLORS=true DEBUG=@tryghost*,ghost:* yarn dev",
@@ -66,34 +44,4 @@
     "query:posts": "cd ghost/core/core/server/data/tinybird/scripts && ./query-posts.sh",
     "query:members": "cd ghost/core/core/server/data/tinybird/scripts && ./query-members.sh",
     "generate:analytics": "cd ghost/core && node core/server/data/tinybird/scripts/analytics-generator.js"
-  },
-  "resolutions": {
-    "@tryghost/errors": "^1.3.7",
-    "@tryghost/logging": "2.4.23",
-    "jackspeak": "2.3.6",
-    "moment": "2.24.0",
-    "moment-timezone": "0.5.45"
-  },
-  "lint-staged": {
-    "*.js": "eslint"
-  },
-  "dependencies": {
-    "patch-package": "8.0.0",
-    "postinstall-postinstall": "2.1.0"
-  },
-  "devDependencies": {
-    "@actions/core": "1.11.1",
-    "chalk": "4.1.2",
-    "concurrently": "8.2.2",
-    "eslint": "8.57.1",
-    "eslint-plugin-ghost": "3.4.3",
-    "eslint-plugin-react": "7.37.5",
-    "husky": "8.0.3",
-    "inquirer": "8.2.6",
-    "jsonc-parser": "3.3.1",
-    "lint-staged": "15.5.2",
-    "nx": "20.8.2",
-    "rimraf": "5.0.10",
-    "typescript": "5.8.3"
-  }
 }
