@@ -15,7 +15,7 @@
     "**/node_modules/**"
   ],
   "scripts": {
-    "build": "yarn workspace ghost build || echo 'No Ghost build step required'",
+    "build": "yarn workspace ghost-admin build && yarn workspace ghost build",
     "build:clean": "rimraf -g 'ghost/*/build' && rimraf -g 'ghost/*/tsconfig.tsbuildinfo'",
     "clean:hard": "node ./.github/scripts/clean.js",
     "dev:debug": "DEBUG_COLORS=true DEBUG=@tryghost*,ghost:* yarn dev",
