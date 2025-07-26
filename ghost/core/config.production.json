@@ -4,6 +4,12 @@
     "port": 2368,
     "host": "0.0.0.0"
   },
+  "database": {
+    "client": "sqlite3",
+    "connection": {
+      "filename": "content/data/ghost.db"
+    }
+  },
   "logging": {
     "transports": ["stdout"]
   }
