@@ -7,10 +7,15 @@
   "database": {
     "client": "sqlite3",
     "connection": {
-      "filename": "content/data/ghost.db"
+      "filename": "/opt/render/project/src/ghost/core/content/data/ghost.db"
     }
   },
   "logging": {
     "transports": ["stdout"]
+  },
+  "process": "systemd",
+  "mail": {
+    "from": "\"Prince Batubo\" <pdawaribatubo@gmail.com>",
+    "transport": "Direct"
   }
 }
