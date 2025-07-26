@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: ghost
+    env: node
+    buildCommand: "cd ghost/core && npm install && npm install --prefix admin && ghost install local --setup --no-start"
+    startCommand: "cd ghost/core && npm start --production"
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_CLIENT
+        value: sqlite3
+      - key: DATABASE_FILENAME
+        value: /opt/render/project/src/ghost/core/content/data/ghost.db
+      - key: MAIL_FROM
+        value: "\"Prince Batubo\" <pdawaribatubo@gmail.com>"
+      - key: MAIL_TRANSPORT
+        value: "Direct"
+    disk:
+      name: ghost-disk
+      mountPath: /opt/render/project/src/ghost/core/content/data
+      sizeGB: 1
